@@ -17,18 +17,22 @@ def init_parser():
 def main():
     args = init_parser()
 
-    org_to_search = 'pharmacy'
+    org_to_search = 'аптека'
     start_point = args.start_point
 
     start_ll = geosearch_controller.get_ll_by_address(
         address=start_point,
     )
-    org_ll = geosearch_controller.get_ll_by_address(
+    org_points = geosearch_controller.generate_all_points(
         address=org_to_search,
         center=start_ll,
     )
-    points = [f"{org_ll},pmb", f"{start_ll},pma"]
-    static_map_points = '~'.join(points)
+    red = ',pm2rdl'
+    for i in range(len(org_points)):
+
+        org_points[i] += red
+    # print(org_points, sep='\n')
+    static_map_points = '~'.join(org_points)
     web_utils.generate_image(
         center_point=start_ll,
         map_type='map',

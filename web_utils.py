@@ -77,6 +77,21 @@ class GeosearchController:
         address = organization["properties"]['description']
         return address
 
+    def generate_all_points(self, *, center, address):
+        geosearch_json = self.geosearch_request(
+            apikey=self.apikey,
+            text=address,
+            center=center,
+        )
+        org_amount = len(geosearch_json["features"])
+        points = []
+        for i in range(org_amount):
+            organization = geosearch_json["features"][i]
+            point = organization["geometry"]["coordinates"]
+            point = "{0},{1}".format(point[0], point[1])
+            points.append(point)
+        return points
+
     @staticmethod
     def geosearch_request(*, apikey, center, text, lang: str = 'ru_RU',
                           type_: str = 'biz'):
